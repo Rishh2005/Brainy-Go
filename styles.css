@@ -1,0 +1,355 @@
+/* Base Colors */
+:root {
+    --classic-bg: #000;
+    --classic-text: #ffd700;
+    --classic-accent: #ffae42;
+
+    --light-bg: #fefefe;
+    --light-text: #333;
+    --light-accent: #4caf50;
+
+    --modern-bg: #002b36;
+    --modern-text: #93a1a1;
+    --modern-accent: #268bd2;
+}
+/* Gen Z Themes */
+
+:root {
+    --main-character-bg: #fef08a;
+    --main-character-text: #3b82f6;
+    --main-character-accent: #eab308;
+
+    --glow-up-bg: #ffdfd4;
+    --glow-up-text: #ff7f50;
+    --glow-up-accent: #ff9f80;
+
+    --mood-af-bg: #1e293b;
+    --mood-af-text: #f43f5e;
+    --mood-af-accent: #3b82f6;
+
+    --slay-mode-bg: #0f172a;
+    --slay-mode-text: #ff4785;
+    --slay-mode-accent: #36cfc9;
+
+    --chill-vibes-bg: #d1fae5;
+    --chill-vibes-text: #14b8a6;
+    --chill-vibes-accent: #06b6d4;
+
+    --lowkey-luxe-bg: #f3f4f6;
+    --lowkey-luxe-text: #6b7280;
+    --lowkey-luxe-accent: #d1d5db;
+
+    --extra-af-bg: #fffbeb;
+    --extra-af-text: #f97316;
+    --extra-af-accent: #fb923c;
+
+    --retrogram-bg: #fef3c7;
+    --retrogram-text: #9d174d;
+    --retrogram-accent: #d97706;
+
+    --softie-core-bg: #fce7f3;
+    --softie-core-text: #ec4899;
+    --softie-core-accent: #d946ef;
+
+    --cyberpunk-glow-bg: #0f172a;
+    --cyberpunk-glow-text: #14f195;
+    --cyberpunk-glow-accent: #ef4444;
+}
+
+/* Theme Classes */
+body[data-theme="main-character"] {
+    --bg-color: var(--main-character-bg);
+    --text-color: var(--main-character-text);
+    --accent-color: var(--main-character-accent);
+}
+
+body[data-theme="glow-up"] {
+    --bg-color: var(--glow-up-bg);
+    --text-color: var(--glow-up-text);
+    --accent-color: var(--glow-up-accent);
+}
+
+/* Apply remaining themes similarly... */
+
+/* Theme Variables */
+body[data-theme="classic"] {
+    --bg-color: var(--classic-bg);
+    --text-color: var(--classic-text);
+    --accent-color: var(--classic-accent);
+}
+
+body[data-theme="light"] {
+    --bg-color: var(--light-bg);
+    --text-color: var(--light-text);
+    --accent-color: var(--light-accent);
+}
+
+body[data-theme="modern"] {
+    --bg-color: var(--modern-bg);
+    --text-color: var(--modern-text);
+    --accent-color: var(--modern-accent);
+}
+
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.app-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.app-title {
+    font-size: 2rem;
+    color: var(--accent-color);
+}
+
+.doodle {
+    font-size: 1.5rem;
+}
+
+.theme-switcher select {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+}
+
+.task-input form {
+    display: flex;
+    gap: 10px;
+}
+
+input, select, button {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid var(--accent-color);
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button.add-btn {
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    cursor: pointer;
+}
+
+/* Task List */
+.task-list-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: var(--accent-color);
+    border-radius: 5px;
+    color: var(--bg-color);
+}
+
+/* Completed Tasks */
+.completed-tasks ul {
+    list-style-type: none;
+    padding: 0;
+}
+/* General Reset */
+body, h1, h2, h3, p, ul, li, div, input, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Root Variables */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --accent-color: #ffcd38;
+}
+
+/* Themes Variables */
+:root {
+    --main-character-bg: #fef08a; /* Bright Yellow */
+    --main-character-text: #1e3a8a; /* Navy Blue */
+    --main-character-accent: #eab308; /* Golden Yellow */
+
+    --glow-up-bg: #fef9c3; /* Light Lemon */
+    --glow-up-text: #9333ea; /* Bright Purple */
+    --glow-up-accent: #f43f5e; /* Coral Red */
+
+    --mood-af-bg: #1e293b; /* Dark Blue-Gray */
+    --mood-af-text: #f4f4f4; /* Off-White */
+    --mood-af-accent: #3b82f6; /* Bright Blue */
+
+    --slay-mode-bg: #0f172a; /* Midnight Blue */
+    --slay-mode-text: #f43f5e; /* Coral Red */
+    --slay-mode-accent: #14b8a6; /* Teal Green */
+
+    --chill-vibes-bg: #d1fae5; /* Mint Green */
+    --chill-vibes-text: #065f46; /* Dark Green */
+    --chill-vibes-accent: #06b6d4; /* Aqua Blue */
+
+    --lowkey-luxe-bg: #f3f4f6; /* Light Gray */
+    --lowkey-luxe-text: #4b5563; /* Medium Gray */
+    --lowkey-luxe-accent: #9ca3af; /* Subtle Gray */
+
+    --extra-af-bg: #fffbeb; /* Light Cream */
+    --extra-af-text: #f97316; /* Orange */
+    --extra-af-accent: #fb923c; /* Amber */
+
+    --retrogram-bg: #fef3c7; /* Soft Yellow */
+    --retrogram-text: #9d174d; /* Maroon */
+    --retrogram-accent: #d97706; /* Burnt Orange */
+
+    --softie-core-bg: #fce7f3; /* Light Pink */
+    --softie-core-text: #db2777; /* Hot Pink */
+    --softie-core-accent: #ec4899; /* Pink Glow */
+
+    --cyberpunk-glow-bg: #0f172a; /* Midnight Blue */
+    --cyberpunk-glow-text: #14f195; /* Neon Green */
+    --cyberpunk-glow-accent: #ef4444; /* Bright Red */
+}
+
+/* General Styling */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button, input {
+    color: var(--text-color);
+    border: 2px solid var(--accent-color);
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover, input:focus {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+/* Themes */
+body[data-theme="main-character"] {
+    --bg-color: var(--main-character-bg);
+    --text-color: var(--main-character-text);
+    --accent-color: var(--main-character-accent);
+}
+
+body[data-theme="glow-up"] {
+    --bg-color: var(--glow-up-bg);
+    --text-color: var(--glow-up-text);
+    --accent-color: var(--glow-up-accent);
+}
+
+body[data-theme="mood-af"] {
+    --bg-color: var(--mood-af-bg);
+    --text-color: var(--mood-af-text);
+    --accent-color: var(--mood-af-accent);
+}
+
+body[data-theme="slay-mode"] {
+    --bg-color: var(--slay-mode-bg);
+    --text-color: var(--slay-mode-text);
+    --accent-color: var(--slay-mode-accent);
+}
+
+body[data-theme="chill-vibes"] {
+    --bg-color: var(--chill-vibes-bg);
+    --text-color: var(--chill-vibes-text);
+    --accent-color: var(--chill-vibes-accent);
+}
+
+body[data-theme="lowkey-luxe"] {
+    --bg-color: var(--lowkey-luxe-bg);
+    --text-color: var(--lowkey-luxe-text);
+    --accent-color: var(--lowkey-luxe-accent);
+}
+
+body[data-theme="extra-af"] {
+    --bg-color: var(--extra-af-bg);
+    --text-color: var(--extra-af-text);
+    --accent-color: var(--extra-af-accent);
+}
+
+body[data-theme="retrogram"] {
+    --bg-color: var(--retrogram-bg);
+    --text-color: var(--retrogram-text);
+    --accent-color: var(--retrogram-accent);
+}
+
+body[data-theme="softie-core"] {
+    --bg-color: var(--softie-core-bg);
+    --text-color: var(--softie-core-text);
+    --accent-color: var(--softie-core-accent);
+}
+
+body[data-theme="cyberpunk-glow"] {
+    --bg-color: var(--cyberpunk-glow-bg);
+    --text-color: var(--cyberpunk-glow-text);
+    --accent-color: var(--cyberpunk-glow-accent);
+}
+
+/* Doodle-Style Enhancements */
+h1, h2, h3 {
+    font-weight: 700;
+    text-shadow: 1px 1px var(--accent-color);
+}
+
+.task-item {
+    border: 2px dashed var(--accent-color);
+    padding: 12px;
+    margin: 8px 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-item:hover {
+    transform: rotate(-2deg) scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Micro-Interactions */
+button:active {
+    transform: scale(0.95);
+    background-color: var(--accent-color);
+    color: #ffffff;
+}
+
+/* Quotes Styling */
+.quote-box {
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    font-size: 1.2rem;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+

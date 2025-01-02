@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainy Go</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --success: #22c55e;
+            --background: #f0f4f8;
+            --card: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: gradient 15s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .stats-bar {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .coin {
+            background: #ffd700;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .game-card {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .game-icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .game-area {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 20px;
+            display: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .jokes-corner {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .joke-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .joke-card:hover {
+            transform: scale(1.02);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(99,102,241,0.3);
+        }
+
+        .achievement {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .game-content {
+            text-align: center;
+        }
+
+        .memory-grid, .color-grid, .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .memory-card, .color-card, .pattern-card {
+            aspect-ratio: 1;
+            background: #e2e8f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .memory-card:hover, .color-card:hover, .pattern-card:hover {
+            background: #cbd5e1;
+        }
+
+        .bubble-wrap {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .bubble {
+            aspect-ratio: 1;
+            background: #e2e8f0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .bubble.popped {
+            background: #cbd5e1;
+            transform: scale(0.9);
+        }
+
+        .word-scramble, .math-challenge, .reaction-time, .simon-says, .sudoku, .jigsaw-puzzle {
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        .scrambled-word, .math-problem, .reaction-prompt, .simon-sequence, .sudoku-grid, .jigsaw-grid {
+            font-size: 2em;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎮 Fun Mental Wellness Hub</h1>
+            <p>Play, laugh, and feel better!</p>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="coin">🌟</div>
+                    <span id="coinCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <div class="coin">🎮</div>
+                    <span id="gamesPlayed">0/15</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="games-grid" id="gamesGrid"></div>
+
+        <div class="jokes-corner">
+            <h2>😄 Daily Dose of Laughter</h2>
+            <div id="jokeContainer"></div>
+            <button class="btn" onclick="getNewJoke()">Get New Joke</button>
+        </div>
+
+        <div id="gameArea" class="game-area">
+            <button class="btn" onclick="backToMenu()">Back to Menu</button>
+            <div id="gameContent" class="game-content"></div>
+        </div>
+    </div>
+
+    <div class="achievement" id="achievement">
+        Achievement Unlocked! 🎉
+    </div>
+
+    <script>
+        let coins = 0;
+        let gamesPlayed = 0;
+        let currentGame = '';
+        let gameState = {};
+
+        const games = [
+            { name: 'Memory Match', icon: '🎯', description: 'Train your brain with this fun matching game', coins: 5 },
+            { name: 'Bubble Pop', icon: '🫧', description: 'Pop virtual bubble wrap for instant stress relief', coins: 3 },
+            { name: 'Word Unscramble', icon: '📝', description: 'Test your vocabulary with scrambled positive words', coins: 4 },
+            { name: 'Color Match', icon: '🎨', description: 'Match colors to improve focus and concentration', coins: 4 },
+            { name: 'Math Challenge', icon: '🧮', description: 'Solve quick math problems to boost your numeracy', coins: 5 },
+            { name: 'Pattern Recognition', icon: '🔍', description: 'Identify patterns to enhance your cognitive skills', coins: 4 },
+            { name: 'Reaction Time', icon: '⚡', description: 'Test and improve your reaction speed', coins: 3 },
+            { name: 'Simon Says', icon: '🔊', description: 'Follow the sequence to boost your memory', coins: 4 },
+            { name: 'Sudoku', icon: '🔢', description: 'Classic number puzzle to challenge your logic', coins: 5 },
+            { name: 'Jigsaw Puzzle', icon: '🧩', description: 'Piece together images to improve spatial reasoning', coins: 4 },
+            { name: 'Anagrams', icon: '🔤', description: 'Form words from jumbled letters', coins: 4 },
+            { name: 'Spot the Difference', icon: '👁️', description: 'Find differences between two similar images', coins: 3 },
+            { name: 'Trivia Quiz', icon: '❓', description: 'Test your knowledge on various topics', coins: 5 },
+            { name: 'Maze Runner', icon: '🌀', description: 'Navigate through increasingly complex mazes', coins: 4 },
+            { name: 'Memory Sequence', icon: '🔢', description: 'Remember and repeat growing number sequences', coins: 4 }
+        ];
+
+        const jokes = [
+            {q: "Why don't eggs tell jokes?", a: "They'd crack up! 🥚"},
+            {q: "What do you call a bear with no teeth?", a: "A gummy bear! 🐻"},
+            {q: "Why did the math book look so sad?", a: "Because it had too many problems! 📚"},
+            {q: "What do you call a dog magician?", a: "A labracadabrador! 🐕"},
+            {q: "Why did the cookie go to the doctor?", a: "Because it was feeling crumbly! 🍪"}
+        ];
+
+        function initializeGames() {
+            const gamesGrid = document.getElementById('gamesGrid');
+            games.forEach(game => {
+                const gameCard = document.createElement('div');
+                gameCard.className = 'game-card';
+                gameCard.onclick = () => startGame(game.name);
+                gameCard.innerHTML = `
+                    <div class="game-icon">${game.icon}</div>
+                    <h3>${game.name}</h3>
+                    <p>${game.description}</p>
+                    <small>+${game.coins} coins</small>
+                `;
+                gamesGrid.appendChild(gameCard);
+            });
+        }
+
+        function getNewJoke() {
+            const jokeContainer = document.getElementById('jokeContainer');
+            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            jokeContainer.innerHTML = `
+                <div class="joke-card">
+                    <p><strong>Q:</strong> ${randomJoke.q}</p>
+                    <p><strong>A:</strong> ${randomJoke.a}</p>
+                </div>
+            `;
+        }
+
+        function showAchievement() {
+            const achievement = document.getElementById('achievement');
+            achievement.style.display = 'block';
+            setTimeout(() => {
+                achievement.style.display = 'none';
+            }, 3000);
+        }
+
+        function updateStats(coinsEarned) {
+            coins += coinsEarned;
+            gamesPlayed++;
+            document.getElementById('coinCount').textContent = coins;
+            document.getElementById('gamesPlayed').textContent = `${gamesPlayed}/15`;
+            showAchievement();
+        }
+
+        function startGame(game) {
+            currentGame = game;
+            document.getElementById('gameArea').style.display = 'block';
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = '';
+
+            switch(game) {
+                case 'Memory Match':
+                    initializeMemoryGame();
+                    break;
+                case 'Bubble Pop':
+                    initializeBubbleWrap();
+                    break;
+                case 'Word Unscramble':
+                    initializeWordScramble();
+                    break;
+                case 'Color Match':
+                    initializeColorMatch();
+                    break;
+                case 'Math Challenge':
+                    initializeMathChallenge();
+                    break;
+                case 'Pattern Recognition':
+                    initializePatternRecognition();
+                    break;
+                case 'Reaction Time':
+                    initializeReactionTime();
+                    break;
+                case 'Simon Says':
+                initializeSimonSays();
+                    break;
+                case 'Sudoku':
+                    initializeSudoku();
+                    break;
+                case 'Jigsaw Puzzle':
+                    initializeJigsawPuzzle();
+                    break;
+                case 'Anagrams':
+                    initializeAnagrams();
+                    break;
+                case 'Spot the Difference':
+                    initializeSpotTheDifference();
+                    break;
+                case 'Trivia Quiz':
+                    initializeTriviaQuiz();
+                    break;
+                case 'Maze Runner':
+                    initializeMazeRunner();
+                    break;
+                case 'Memory Sequence':
+                    initializeMemorySequence();
+                    break;
+            }
+        }
+
+        function backToMenu() {
+            document.getElementById('gameArea').style.display = 'none';
+            currentGame = '';
+            gameState = {};
+        }
+
+        // Memory Game Implementation
+        function initializeMemoryGame() {
+            const emojis = ['🌟', '🎈', '🎨', '❤️', '🌸', '🎵', '🎮', '🎪'];
+            const cards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+            gameState = {
+                cards,
+                flipped: [],
+                matched: [],
+                canFlip: true
+            };
+
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = '<h2>Memory Match</h2>';
+            const grid = document.createElement('div');
+            grid.className = 'memory-grid';
+
+            cards.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.index = index;
+                card.onclick = () => handleMemoryCard(index);
+                grid.appendChild(card);
+            });
+
+            gameContent.appendChild(grid);
+        }
+
+        function handleMemoryCard(index) {
+            if (!gameState.canFlip || gameState.flipped.includes(index) || gameState.matched.includes(index)) return;
+
+            const cards = document.querySelectorAll('.memory-card');
+            cards[index].textContent = gameState.cards[index];
+            gameState.flipped.push(index);
+
+            if (gameState.flipped.length === 2) {
+                gameState.canFlip = false;
+                const [first, second] = gameState.flipped;
+
+                if (gameState.cards[first] === gameState.cards[second]) {
+                    gameState.matched.push(first, second);
+                    gameState.flipped = [];
+                    gameState.canFlip = true;
+
+                    if (gameState.matched.length === gameState.cards.length) {
+                        updateStats(5);
+                        setTimeout(backToMenu, 1500);
+                    }
+                } else {
+                    setTimeout(() => {
+                        cards[first].textContent = '';
+                        cards[second].textContent = '';
+                        gameState.flipped = [];
+                        gameState.canFlip = true;
+                    }, 1000);
+                }
+            }
+        }
+
+        // Bubble Wrap Implementation
+        function initializeBubbleWrap() {
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = '<h2>Bubble Pop</h2>';
+
+            const bubbleWrap = document.createElement('div');
+            bubbleWrap.className = 'bubble-wrap';
+
+            for (let i = 0; i < 25; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.onclick = () => popBubble(bubble);
+                bubbleWrap.appendChild(bubble);
+            }
+
+            gameContent.appendChild(bubbleWrap);
+        }
+
+        function popBubble(bubble) {
+            if (!bubble.classList.contains('popped')) {
+                bubble.classList.add('popped');
+                if (document.querySelectorAll('.bubble:not(.popped)').length === 0) {
+                    updateStats(3);
+                    setTimeout(backToMenu, 1500);
+                }
+            }
+        }
+
+        // Word Unscramble Implementation
+        function initializeWordScramble() {
+            const words = ['HAPPINESS', 'GRATITUDE', 'KINDNESS', 'LAUGHTER', 'FRIENDSHIP'];
+            const word = words[Math.floor(Math.random() * words.length)];
+            const scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
+
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Word Unscramble</h2>
+                <div class="word-scramble">
+                    <p class="scrambled-word">${scrambled}</p>
+                    <input type="text" id="wordGuess" placeholder="Enter your guess">
+                    <button class="btn" onclick="checkWordGuess('${word}')">Submit</button>
+                </div>
+            `;
+        }
+
+        function checkWordGuess(correctWord) {
+            const guess = document.getElementById('wordGuess').value.toUpperCase();
+            if (guess === correctWord) {
+                updateStats(4);
+                setTimeout(backToMenu, 1500);
+            } else {
+                alert('Try again!');
+            }
+        }
+
+        // Color Match Implementation
+        function initializeColorMatch() {
+            const colors = ['red', 'blue', 'green', 'yellow'];
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = '<h2>Color Match</h2>';
+
+            const colorGrid = document.createElement('div');
+            colorGrid.className = 'color-grid';
+
+            colors.forEach(color => {
+                const card = document.createElement('div');
+                card.className = 'color-card';
+                card.style.backgroundColor = color;
+                card.onclick = () => handleColorMatch(color);
+                colorGrid.appendChild(card);
+            });
+
+            gameContent.appendChild(colorGrid);
+
+            gameState.targetColor = colors[Math.floor(Math.random() * colors.length)];
+            gameState.attempts = 0;
+
+            const prompt = document.createElement('p');
+            prompt.textContent = `Click on the ${gameState.targetColor} color`;
+            gameContent.appendChild(prompt);
+        }
+
+        function handleColorMatch(selectedColor) {
+            gameState.attempts++;
+            if (selectedColor === gameState.targetColor) {
+                updateStats(4);
+                setTimeout(backToMenu, 1500);
+            } else if (gameState.attempts >= 3) {
+                alert('Game over! Try again.');
+                setTimeout(backToMenu, 1500);
+            } else {
+                alert('Try again!');
+            }
+        }
+
+        // Math Challenge Implementation
+        function initializeMathChallenge() {
+            const operators = ['+', '-', '*'];
+            const a = Math.floor(Math.random() * 10) + 1;
+            const b = Math.floor(Math.random() * 10) + 1;
+            const operator = operators[Math.floor(Math.random() * operators.length)];
+            const problem = `${a} ${operator} ${b}`;
+            const answer = eval(problem);
+
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Math Challenge</h2>
+                <div class="math-challenge">
+                    <p class="math-problem">${problem} = ?</p>
+                    <input type="number" id="mathAnswer" placeholder="Enter your answer">
+                    <button class="btn" onclick="checkMathAnswer(${answer})">Submit</button>
+                </div>
+            `;
+        }
+
+        function checkMathAnswer(correctAnswer) {
+            const userAnswer = parseInt(document.getElementById('mathAnswer').value);
+            if (userAnswer === correctAnswer) {
+                updateStats(5);
+                setTimeout(backToMenu, 1500);
+            } else {
+                alert('Try again!');
+            }
+        }
+
+        // Pattern Recognition Implementation
+        function initializePatternRecognition() {
+            const patterns = [
+                ['🔴', '🔵', '🔴', '🔵', '?'],
+                ['🔺', '🔻', '🔺', '🔻', '?'],
+                ['1', '2', '4', '8', '?'],
+                ['A', 'C', 'E', 'G', '?']
+            ];
+            const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Pattern Recognition</h2>
+                <div class="pattern-recognition">
+                    <p class="pattern">${pattern.join(' ')}</p>
+                    <input type="text" id="patternGuess" placeholder="Enter the next item">
+                    <button class="btn" onclick="checkPatternGuess('${pattern[pattern.length - 2]}')">Submit</button>
+                </div>
+            `;
+        }
+
+        function checkPatternGuess(correctAnswer) {
+            const guess = document.getElementById('patternGuess').value;
+            if (guess === correctAnswer) {
+                updateStats(4);
+                setTimeout(backToMenu, 1500);
+            } else {
+                alert('Try again!');
+            }
+        }
+
+        // Reaction Time Implementation
+        function initializeReactionTime() {
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Reaction Time</h2>
+                <div class="reaction-time">
+                    <p class="reaction-prompt">Wait for the green light, then click as fast as you can!</p>
+                    <div id="reactionTarget" style="width: 200px; height: 200px; background-color: red; margin: 20px auto;"></div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const target = document.getElementById('reactionTarget');
+                target.style.backgroundColor = 'green';
+                const startTime = Date.now();
+                target.onclick = () => {
+                    const endTime = Date.now();
+                    const reactionTime = endTime - startTime;
+                    alert(`Your reaction time: ${reactionTime}ms`);
+                    updateStats(3);
+                    setTimeout(backToMenu, 1500);
+                };
+            }, Math.random() * 3000 + 1000);
+        }
+
+        // Simon Says Implementation
+        function initializeSimonSays() {
+            const colors = ['red', 'blue', 'green', 'yellow'];
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Simon Says</h2>
+                <div class="simon-says">
+                    <div id="simonGrid" class="color-grid"></div>
+                    <p id="simonPrompt">Watch the sequence</p>
+                    <button id="startSimon" class="btn" onclick="startSimonSequence()">Start</button>
+                </div>
+            `;
+
+            const simonGrid = document.getElementById('simonGrid');
+            colors.forEach(color => {
+                const card = document.createElement('div');
+                card.className = 'color-card';
+                card.style.backgroundColor = color;
+                card.dataset.color = color;
+                simonGrid.appendChild(card);
+            });
+
+            gameState.simonSequence = [];
+            gameState.playerSequence = [];
+        }
+
+        function startSimonSequence() {
+            document.getElementById('startSimon').style.display = 'none';
+            gameState.simonSequence.push(getRandomColor());
+            playSimonSequence();
+        }
+
+        function playSimonSequence() {
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i >= gameState.simonSequence.length) {
+                    clearInterval(interval);
+                    document.getElementById('simonPrompt').textContent = 'Your turn!';
+                    enableSimonInput();
+                    return;
+                }
+                const color = gameState.simonSequence[i];
+                flashSimonColor(color);
+                i++;
+            }, 1000);
+        }
+
+        function flashSimonColor(color) {
+            const card = document.querySelector(`.color-card[data-color="${color}"]`);
+            card.style.opacity = '0.5';
+            setTimeout(() => {
+                card.style.opacity = '1';
+            }, 500);
+        }
+
+        function enableSimonInput() {
+            const cards = document.querySelectorAll('.color-card');
+            cards.forEach(card => {
+                card.onclick = () => handleSimonInput(card.dataset.color);
+            });
+        }
+
+        function handleSimonInput(color) {
+            gameState.playerSequence.push(color);
+            flashSimonColor(color);
+
+            if (gameState.playerSequence[gameState.playerSequence.length - 1] !== gameState.simonSequence[gameState.playerSequence.length - 1]) {
+                alert('Game over! Try again.');
+                setTimeout(backToMenu, 1500);
+                return;
+            }
+
+            if (gameState.playerSequence.length === gameState.simonSequence.length) {
+                if (gameState.simonSequence.length === 5) {
+                    updateStats(4);
+                    setTimeout(backToMenu, 1500);
+                } else {
+                    gameState.playerSequence = [];
+                    document.getElementById('simonPrompt').textContent = 'Well done! Watch the next sequence';
+                    setTimeout(startSimonSequence, 1000);
+                }
+            }
+        }
+
+        function getRandomColor() {
+            const colors = ['red', 'blue', 'green', 'yellow'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Sudoku Implementation
+        function initializeSudoku() {
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Sudoku</h2>
+                <div class="sudoku">
+                    <div id="sudokuGrid" class="sudoku-grid"></div>
+                    <button class="btn" onclick="checkSudoku()">Check Solution</button>
+                </div>
+            `;
+
+            const sudokuGrid = document.getElementById('sudokuGrid');
+            const puzzle = generateSudokuPuzzle();
+
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    const cell = document.createElement('input');
+                    cell.type = 'number';
+                    cell.min = 1;
+                    cell.max = 9;
+                    cell.value = puzzle[i][j] || '';
+                    cell.readOnly = puzzle[i][j] !== 0;
+                    sudokuGrid.appendChild(cell);
+                }
+            }
+        }
+
+        function generateSudokuPuzzle() {
+            // This is a simplified version. A real Sudoku generator would be more complex.
+            const puzzle = [
+                [5, 3, 0, 0, 7, 0, 0, 0, 0],
+                [6, 0, 0, 1, 9, 5, 0, 0, 0],
+                [0, 9, 8, 0, 0, 0, 0, 6, 0],
+                [8, 0, 0, 0, 6, 0, 0, 0, 3],
+                [4, 0, 0, 8, 0, 3, 0, 0, 1],
+                [7, 0, 0, 0, 2, 0, 0, 0, 6],
+                [0, 6, 0, 0, 0, 0, 2, 8, 0],
+                [0, 0, 0, 4, 1, 9, 0, 0, 5],
+                [0, 0, 0, 0, 8, 0, 0, 7, 9]
+            ];
+            return puzzle;
+        }
+
+        function checkSudoku() {
+            // This is a simplified check. A real Sudoku checker would be more thorough.
+            const cells = document.querySelectorAll('#sudokuGrid input');
+            let isValid = true;
+            cells.forEach(cell => {
+                if (cell.value === '' || parseInt(cell.value) < 1 || parseInt(cell.value) > 9) {
+                    isValid = false;
+                }
+            });
+            if (isValid) {
+                updateStats(5);
+                alert('Congratulations! You solved the Sudoku puzzle!');
+                setTimeout(backToMenu, 1500);
+            } else {
+                alert('The solution is not correct. Keep trying!');
+            }
+        }
+
+        // Jigsaw Puzzle Implementation
+        function initializeJigsawPuzzle() {
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Jigsaw Puzzle</h2>
+                <div class="jigsaw-puzzle">
+                    <div id="jigsawGrid" class="jigsaw-grid"></div>
+                    <button class="btn" onclick="checkJigsaw()">Check Solution</button>
+                </div>
+            `;
+
+            const jigsawGrid = document.getElementById('jigsawGrid');
+            const pieces = ['🌳', '🏠', '☀️', '🌻', '🐦', '🌈', '🌺', '🦋', '🍎'];
+            pieces.sort(() => Math.random() - 0.5);
+
+            pieces.forEach(piece => {
+                const cell = document.createElement('div');
+                cell.className = 'jigsaw-piece';
+                cell.textContent = piece;
+                cell.draggable = true;
+                cell.addEventListener('dragstart', drag);
+                jigsawGrid.appendChild(cell);
+            });
+
+            jigsawGrid.addEventListener('dragover', allowDrop);
+            jigsawGrid.addEventListener('drop', drop);
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.textContent);
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text");
+            const draggedElement = document.querySelector(`.jigsaw-piece:not(:empty)`);
+            if (event.target.classList.contains('jigsaw-piece') && event.target !== draggedElement) {
+                const temp = event.target.textContent;
+                event.target.textContent = data;
+                draggedElement.textContent = temp;
+            }
+        }
+
+        function checkJigsaw() {
+            const pieces = document.querySelectorAll('.jigsaw-piece');
+            const solution = ['🌳', '🏠', '☀️', '🌻', '🐦', '🌈', '🌺', '🦋', '🍎'];
+            let isCorrect = true;
+            pieces.forEach((piece, index) => {
+                if (piece.textContent !== solution[index]) {
+                    isCorrect = false;
+                }
+            });
+            if (isCorrect) {
+                updateStats(4);
+                alert('Congratulations! You solved the Jigsaw puzzle!');
+                setTimeout(backToMenu, 1500);
+            } else {
+                alert('The solution is not correct. Keep trying!');
+            }
+        }
+
+        // Anagrams Implementation
+        function initializeAnagrams() {
+            const words = ['SMILE', 'HAPPY', 'JOYFUL', 'CONTENT', 'BLISSFUL'];
+            const word = words[Math.floor(Math.random() * words.length)];
+            const scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
+
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Anagrams</h2>
+                <div class="anagrams">
+                    <p>Rearrange the letters to form a positive word:</p>
+                    <p class="scrambled-word">${scrambled}</p>
+                    <input type="text" id="anagramGuess" placeholder="Enter your guess">
+                    <button class="btn" onclick="checkAnagram('${word}')">Submit</button>
+                </div>
+            `;
+        }
+
+        function checkAnagram(correctWord) {
+            const guess = document.getElementById('anagramGuess').value.toUpperCase();
+            if (guess === correctWord) {
+                updateStats(4);
+                alert('Correct! Well done!');
+                setTimeout(backToMenu, 1500);
+            } else {
+                alert('Try again!');
+            }
+        }
+
+        // Spot the Difference Implementation
+        function initializeSpotTheDifference() {
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Spot the Difference</h2>
+                <div class="spot-the-difference">
+                    <p>Find 3 differences between these images:</p>
+                    <div id="imageContainer" style="display: flex; justify-content: space-around;"></div>
+                    <p id="differencesFound">Differences found: 0/3</p>
+                </div>
+            `;
+
+            const imageContainer = document.getElementById('imageContainer');
+            const image1 = document.createElement('div');
+            const image2 = document.createElement('div');
+            image1.style.width = '200px';
+            image1.style.height = '200px';
+            image2.style.width = '200px';
+            image2.style.height = '200px';
+            image1.style.border = '1px solid black';
+            image2.style.border = '1px solid black';
+            image1.style.position = 'relative';
+            image2.style.position = 'relative';
+            imageContainer.appendChild(image1);
+            imageContainer.appendChild(image2);
+
+            const differences = [
+                {top: '10%', left: '10%'},
+                {top: '50%', left: '50%'},
+                {top: '80%', left: '80%'}
+            ];
+
+            differences.forEach((diff, index) => {
+                const spot = document.createElement('div');
+                spot.style.position = 'absolute';
+                spot.style.top = diff.top;
+                spot.style.left = diff.left;
+                spot.style.width = '20px';
+                spot.style.height = '20px';
+                spot.style.borderRadius = '50%';
+                spot.style.backgroundColor = 'transparent';
+                spot.style.cursor = 'pointer';
+                spot.onclick = () => handleSpotClick(index);
+                image2.appendChild(spot);
+            });
+
+            gameState.differencesFound = 0;
+        }
+
+        function handleSpotClick(index) {
+            const spot = document.querySelectorAll('#imageContainer > div:last-child > div')[index];
+            if (spot.style.backgroundColor === 'transparent') {
+                spot.style.backgroundColor = 'red';
+                gameState.differencesFound++;
+                document.getElementById('differencesFound').textContent = `Differences found: ${gameState.differencesFound}/3`;
+                if (gameState.differencesFound === 3) {
+                    updateStats(3);
+                    alert('Congratulations! You found all the differences!');
+                    setTimeout(backToMenu, 1500);
+                }
+            }
+        }
+
+        // Trivia Quiz Implementation
+        function initializeTriviaQuiz() {
+            const questions = [
+                {
+                    question: "What is the capital of France?",
+                    options: ["London", "Berlin", "Paris", "Madrid"],
+                    answer: 2
+                },
+                {
+                    question: "Which planet is known as the Red Planet?",
+                    options: ["Venus", "Mars", "Jupiter", "Saturn"],
+                    answer: 1
+                },
+                {
+                    question: "Who painted the Mona Lisa?",
+                    options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
+                    answer: 2
+                }
+            ];
+
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+
+            showNextQuestion();
+        }
+
+        function showNextQuestion() {
+            if (gameState.currentQuestion >= 3) {
+                endTriviaQuiz();
+                return;
+            }
+
+            const question = questions[gameState.currentQuestion];
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Trivia Quiz</h2>
+                <div class="trivia-quiz">
+                    <p>${question.question}</p>
+                    ${question.options.map((option, index) => `
+                        <button class="btn" onclick="answerTrivia(${index})">${option}</button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function answerTrivia(selectedIndex) {
+            const question = questions[gameState.currentQuestion];
+            if (selectedIndex === question.answer) {
+                gameState.score++;
+            }
+            gameState.currentQuestion++;
+            showNextQuestion();
+        }
+
+        function endTriviaQuiz() {
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Trivia Quiz</h2>
+                <div class="trivia-quiz">
+                    <p>You scored ${gameState.score} out of 3!</p>
+                </div>
+            `;
+            updateStats(5);
+            setTimeout(backToMenu, 1500);
+        }
+
+        // Maze Runner Implementation
+        function initializeMazeRunner() {
+            const maze = [
+                [0, 0, 1, 1, 1, 1, 1],
+                [1, 0, 0, 0, 0, 0, 1],
+                [1, 0, 1, 1, 1, 0, 1],
+                [1, 0, 0, 0, 1, 0, 1],
+                [1, 1, 1, 0, 0, 0, 1],
+                [1, 1, 1, 1, 1, 0, 0]
+            ];
+
+            gameState.playerPosition = {x: 0, y: 0};
+            gameState.maze = maze;
+
+            renderMaze();
+        }
+
+        function renderMaze() {
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Maze Runner</h2>
+                <div class="maze-runner">
+                    <div id="maze"></div>
+                    <div class="controls">
+                        <button class="btn" onclick="movePlayer('up')">Up</button>
+                        <button class="btn" onclick="movePlayer('down')">Down</button>
+                        <button class="btn" onclick="movePlayer('left')">Left</button>
+                        <button class="btn" onclick="movePlayer('right')">Right</button>
+                    </div>
+                </div>
+            `;
+
+            const mazeElement = document.getElementById('maze');
+            mazeElement.style.display = 'grid';
+            mazeElement.style.gridTemplateColumns = `repeat(${gameState.maze[0].length}, 30px)`;
+
+            gameState.maze.forEach((row, y) => {
+                row.forEach((cell, x) => {
+                    const cellElement = document.createElement('div');
+                    cellElement.style.width = '30px';
+                    cellElement.style.height = '30px';
+                    cellElement.style.border = '1px solid black';
+                    cellElement.style.backgroundColor = cell === 1 ? 'black' : 'white';
+                    if (x === gameState.playerPosition.x && y === gameState.playerPosition.y) {
+                        cellElement.style.backgroundColor = 'red';
+                    }
+                    mazeElement.appendChild(cellElement);
+                });
+            });
+        }
+
+        function movePlayer(direction) {
+            const newPosition = {...gameState.playerPosition};
+            switch (direction) {
+                case 'up':
+                    newPosition.y--;
+                    break;
+                case 'down':
+                    newPosition.y++;
+                    break;
+                case 'left':
+                    newPosition.x--;
+                    break;
+                case 'right':
+                    newPosition.x++;
+                    break;
+            }
+
+            if (isValidMove(newPosition)) {
+                gameState.playerPosition = newPosition;
+                if (newPosition.x === gameState.maze[0].length - 1 && newPosition.y === gameState.maze.length - 1) {
+                    updateStats(4);
+                    alert('Congratulations! You escaped the maze!');
+                    setTimeout(backToMenu, 1500);
+                } else {
+                    renderMaze();
+                }
+            }
+        }
+
+        function isValidMove(position) {
+            return position.x >= 0 && position.x < gameState.maze[0].length &&
+                   position.y >= 0 && position.y < gameState.maze.length &&
+                   gameState.maze[position.y][position.x] === 0;
+        }
+
+        // Memory Sequence Implementation
+        function initializeMemorySequence() {
+            gameState.sequence = [];
+            gameState.playerSequence = [];
+            gameState.round = 1;
+
+            addToSequence();
+        }
+
+        function addToSequence() {
+            const colors = ['red', 'blue', 'green', 'yellow'];
+            gameState.sequence.push(colors[Math.floor(Math.random() * colors.length)]);
+            showSequence();
+        }
+
+        function showSequence() {
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Memory Sequence</h2>
+                <div class="memory-sequence">
+                    <div id="sequenceDisplay"></div>
+                    <div id="playerInput" style="display: none;">
+                        <button class="btn" style="background-color: red;" onclick="playerInput('red')">Red</button>
+                        <button class="btn" style="background-color: blue;" onclick="playerInput('blue')">Blue</button>
+                        <button class="btn" style="background-color: green;" onclick="playerInput('green')">Green</button>
+                        <button class="btn" style="background-color: yellow;" onclick="playerInput('yellow')">Yellow</button>
+                    </div>
+                </div>
+            `;
+
+            const sequenceDisplay = document.getElementById('sequenceDisplay');
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i >= gameState.sequence.length) {
+                    clearInterval(interval);
+                    document.getElementById('playerInput').style.display = 'block';
+                    return;
+                }
+                const color = gameState.sequence[i];
+                sequenceDisplay.style.backgroundColor = color;
+                setTimeout(() => {
+                    sequenceDisplay.style.backgroundColor = 'white';
+                }, 500);
+                i++;
+            }, 1000);
+        }
+
+        function playerInput(color) {
+            gameState.playerSequence.push(color);
+            if (gameState.playerSequence[gameState.playerSequence.length - 1] !== gameState.sequence[gameState.playerSequence.length - 1]) {
+                alert(`Game Over! You reached round ${gameState.round}.`);
+                updateStats(gameState.round);
+                setTimeout(backToMenu, 1500);
+                return;
+            }
+            if (gameState.playerSequence.length === gameState.sequence.length) {
+                gameState.round++;
+                gameState.playerSequence = [];
+                setTimeout(addToSequence, 1000);
+            }
+        }
+
+        // Initialize the games
+        initializeGames();
+        getNewJoke();
+    </script>
+</body>
+</html>
