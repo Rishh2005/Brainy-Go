@@ -5,30 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brainy Go</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
         :root {
             --primary: #6366f1;
             --secondary: #8b5cf6;
             --success: #22c55e;
             --background: #f0f4f8;
             --card: #ffffff;
+            --input-focus: #2d8cf0;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --bg-color: #fff;
+            --main-color: #323232;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Comic Neue', cursive;
         }
 
         body {
             background-color: var(--background);
-            color: #333;
+            color: var(--font-color);
             min-height: 100vh;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .container {
             max-width: 1200px;
+            width: 100%;
             margin: 0 auto;
         }
 
@@ -39,20 +50,38 @@
             border-radius: 20px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            animation: gradient 15s ease infinite;
-            background-size: 200% 200%;
+            box-shadow: 8px 8px var(--main-color);
+            border: 4px solid var(--main-color);
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: move-background 20s linear infinite;
+        }
+
+        @keyframes move-background {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50%, 50%); }
         }
 
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
+            position: relative;
         }
 
         .stats-bar {
@@ -63,6 +92,7 @@
             display: flex;
             justify-content: center;
             gap: 20px;
+            position: relative;
         }
 
         .stat-item {
@@ -79,7 +109,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 2px 2px var(--main-color);
+            border: 2px solid var(--main-color);
         }
 
         .games-grid {
@@ -96,28 +127,37 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 8px 8px var(--main-color);
+            border: 4px solid var(--main-color);
             position: relative;
             overflow: hidden;
         }
 
         .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px var(--main-color);
         }
 
         .game-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(99,102,241,0.1) 10px,
+                rgba(99,102,241,0.1) 20px
+            );
+            z-index: -1;
+            animation: move-background 20s linear infinite;
         }
 
         .game-icon {
-            font-size: 2em;
+            font-size: 3em;
             margin-bottom: 15px;
             color: var(--primary);
         }
@@ -127,8 +167,8 @@
             padding: 30px;
             border-radius: 20px;
             margin-top: 20px;
-            display: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 8px 8px var(--main-color);
+            border: 4px solid var(--main-color);
         }
 
         .jokes-corner {
@@ -136,7 +176,8 @@
             padding: 30px;
             border-radius: 20px;
             margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 8px 8px var(--main-color);
+            border: 4px solid var(--main-color);
         }
 
         .joke-card {
@@ -146,6 +187,7 @@
             margin-bottom: 15px;
             cursor: pointer;
             transition: all 0.3s;
+            border: 2px solid var(--main-color);
         }
 
         .joke-card:hover {
@@ -161,11 +203,13 @@
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s;
+            box-shadow: 4px 4px var(--main-color);
+            border: 2px solid var(--main-color);
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(99,102,241,0.3);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px var(--main-color);
         }
 
         .achievement {
@@ -177,12 +221,15 @@
             padding: 15px 25px;
             border-radius: 10px;
             display: none;
-            animation: slideIn 0.5s ease-out;
+            animation: pop-in 0.5s ease-out;
+            box-shadow: 4px 4px var(--main-color);
+            border: 2px solid var(--main-color);
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
+        @keyframes pop-in {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         .game-content {
@@ -207,10 +254,13 @@
             font-size: 2em;
             cursor: pointer;
             transition: all 0.3s;
+            box-shadow: 4px 4px var(--main-color);
+            border: 2px solid var(--main-color);
         }
 
         .memory-card:hover, .color-card:hover, .pattern-card:hover {
-            background: #cbd5e1;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px var(--main-color);
         }
 
         .bubble-wrap {
@@ -227,11 +277,14 @@
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s;
+            box-shadow: 4px 4px var(--main-color);
+            border: 2px solid var(--main-color);
         }
 
         .bubble.popped {
             background: #cbd5e1;
             transform: scale(0.9);
+            box-shadow: 2px 2px var(--main-color);
         }
 
         .word-scramble, .math-challenge, .reaction-time, .simon-says, .sudoku, .jigsaw-puzzle {
@@ -248,19 +301,21 @@
         input[type="text"], input[type="number"] {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--main-color);
             border-radius: 10px;
             font-size: 16px;
             margin-bottom: 15px;
+            box-shadow: 4px 4px var(--main-color);
         }
 
         .progress-bar {
             width: 100%;
-            height: 10px;
+            height: 20px;
             background: #e2e8f0;
-            border-radius: 5px;
+            border-radius: 10px;
             margin: 15px 0;
             overflow: hidden;
+            border: 2px solid var(--main-color);
         }
 
         .progress {
@@ -269,10 +324,61 @@
             width: 0%;
             transition: width 0.3s;
         }
+
+
+        .riddle-container, .tongue-twister-container, .meditation-container, .breathing-exercise-container, .positive-affirmation-container {
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        .riddle, .tongue-twister, .meditation-prompt, .breathing-prompt, .affirmation {
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+
+        .meditation-timer, .breathing-timer {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        #drawingCanvas {
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            box-shadow: 4px 4px var(--main-color);
+        }
+
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--main-color);
+            box-shadow: 2px 2px var(--main-color);
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+
+    <div id="gameContainer" class="container">
         <header class="header">
             <h1>🎮 Fun Mental Wellness Hub</h1>
             <p>Play, laugh, and feel better!</p>
@@ -283,7 +389,7 @@
                 </div>
                 <div class="stat-item">
                     <div class="coin">🎮</div>
-                    <span id="gamesPlayed">0/15</span>
+                    <span id="gamesPlayed">0/20</span>
                 </div>
             </div>
         </header>
@@ -327,7 +433,12 @@
             { name: 'Spot the Difference', icon: '👁️', description: 'Find differences between two similar images', coins: 3 },
             { name: 'Trivia Quiz', icon: '❓', description: 'Test your knowledge on various topics', coins: 5 },
             { name: 'Maze Runner', icon: '🌀', description: 'Navigate through increasingly complex mazes', coins: 4 },
-            { name: 'Memory Sequence', icon: '🔢', description: 'Remember and repeat growing number sequences', coins: 4 }
+            { name: 'Memory Sequence', icon: '🔢', description: 'Remember and repeat growing number sequences', coins: 4 },
+            { name: 'Riddles', icon: '🧠', description: 'Solve mind-bending riddles', coins: 5 },
+            { name: 'Tongue Twisters', icon: '👅', description: 'Practice pronunciation with fun phrases', coins: 3 },
+            { name: 'Guided Meditation', icon: '🧘', description: 'Relax and focus with guided meditation', coins: 4 },
+            { name: 'Breathing Exercise', icon: '🌬️', description: 'Learn and practice calming breathing techniques', coins: 3 },
+            { name: 'Positive Affirmations', icon: '💖', description: 'Boost your mood with positive self-talk', coins: 3 }
         ];
 
         const jokes = [
@@ -335,8 +446,14 @@
             {q: "What do you call a bear with no teeth?", a: "A gummy bear! 🐻"},
             {q: "Why did the math book look so sad?", a: "Because it had too many problems! 📚"},
             {q: "What do you call a dog magician?", a: "A labracadabrador! 🐕"},
-            {q: "Why did the cookie go to the doctor?", a: "Because it was feeling crumbly! 🍪"}
+            {q: "Why did the cookie go to the doctor?", a: "Because it was feeling crumbly! 🍪"},
+            {q: "Why don't scientists trust atoms?", a: "Because they make up everything! ⚛️"},
+            {q: "What do you call a fake noodle?", a: "An impasta! 🍝"},
+            {q: "Why did the scarecrow win an award?", a: "He was outstanding in his field! 🌾"},
+            {q: "Why don't skeletons fight each other?", a: "They don't have the guts! 💀"},
+            {q: "What do you call a sleeping bull?", a: "A bulldozer! 🐂"}
         ];
+
 
         function initializeGames() {
             const gamesGrid = document.getElementById('gamesGrid');
@@ -377,7 +494,7 @@
             coins += coinsEarned;
             gamesPlayed++;
             document.getElementById('coinCount').textContent = coins;
-            document.getElementById('gamesPlayed').textContent = `${gamesPlayed}/15`;
+            document.getElementById('gamesPlayed').textContent = `${gamesPlayed}/20`;
             showAchievement();
         }
 
@@ -410,7 +527,7 @@
                     initializeReactionTime();
                     break;
                 case 'Simon Says':
-                initializeSimonSays();
+                    initializeSimonSays();
                     break;
                 case 'Sudoku':
                     initializeSudoku();
@@ -432,6 +549,21 @@
                     break;
                 case 'Memory Sequence':
                     initializeMemorySequence();
+                    break;
+                case 'Riddles':
+                    initializeRiddles();
+                    break;
+                case 'Tongue Twisters':
+                    initializeTongueTwisters();
+                    break;
+                case 'Guided Meditation':
+                    initializeGuidedMeditation();
+                    break;
+                case 'Breathing Exercise':
+                    initializeBreathingExercise();
+                    break;
+                case 'Positive Affirmations':
+                    initializePositiveAffirmations();
                     break;
             }
         }
@@ -530,7 +662,7 @@
 
         // Word Unscramble Implementation
         function initializeWordScramble() {
-            const words = ['HAPPINESS', 'GRATITUDE', 'KINDNESS', 'LAUGHTER', 'FRIENDSHIP'];
+            const words = ['HAPPINESS', 'GRATITUDE', 'KINDNESS', 'LAUGHTER', 'FRIENDSHIP', 'COURAGE', 'STRENGTH', 'PEACE', 'LOVE', 'JOY'];
             const word = words[Math.floor(Math.random() * words.length)];
             const scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
 
@@ -549,6 +681,7 @@
             const guess = document.getElementById('wordGuess').value.toUpperCase();
             if (guess === correctWord) {
                 updateStats(4);
+                alert('Correct! Well done!');
                 setTimeout(backToMenu, 1500);
             } else {
                 alert('Try again!');
@@ -557,7 +690,7 @@
 
         // Color Match Implementation
         function initializeColorMatch() {
-            const colors = ['red', 'blue', 'green', 'yellow'];
+            const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
             const gameContent = document.getElementById('gameContent');
             gameContent.innerHTML = '<h2>Color Match</h2>';
 
@@ -586,6 +719,7 @@
             gameState.attempts++;
             if (selectedColor === gameState.targetColor) {
                 updateStats(4);
+                alert('Correct! Well done!');
                 setTimeout(backToMenu, 1500);
             } else if (gameState.attempts >= 3) {
                 alert('Game over! Try again.');
@@ -619,6 +753,7 @@
             const userAnswer = parseInt(document.getElementById('mathAnswer').value);
             if (userAnswer === correctAnswer) {
                 updateStats(5);
+                alert('Correct! Well done!');
                 setTimeout(backToMenu, 1500);
             } else {
                 alert('Try again!');
@@ -631,7 +766,9 @@
                 ['🔴', '🔵', '🔴', '🔵', '?'],
                 ['🔺', '🔻', '🔺', '🔻', '?'],
                 ['1', '2', '4', '8', '?'],
-                ['A', 'C', 'E', 'G', '?']
+                ['A', 'C', 'E', 'G', '?'],
+                ['🌑', '🌒', '🌓', '🌔', '?'],
+                ['🐣', '🐥', '🐔', '?']
             ];
             const pattern = patterns[Math.floor(Math.random() * patterns.length)];
 
@@ -650,6 +787,7 @@
             const guess = document.getElementById('patternGuess').value;
             if (guess === correctAnswer) {
                 updateStats(4);
+                alert('Correct! Well done!');
                 setTimeout(backToMenu, 1500);
             } else {
                 alert('Try again!');
@@ -756,6 +894,7 @@
             if (gameState.playerSequence.length === gameState.simonSequence.length) {
                 if (gameState.simonSequence.length === 5) {
                     updateStats(4);
+                    alert('Congratulations!You completed the sequence!');
                     setTimeout(backToMenu, 1500);
                 } else {
                     gameState.playerSequence = [];
@@ -898,7 +1037,7 @@
 
         // Anagrams Implementation
         function initializeAnagrams() {
-            const words = ['SMILE', 'HAPPY', 'JOYFUL', 'CONTENT', 'BLISSFUL'];
+            const words = ['SMILE', 'HAPPY', 'JOYFUL', 'CONTENT', 'BLISSFUL', 'SERENE', 'OPTIMIST', 'CHEERFUL', 'GRATEFUL', 'INSPIRED'];
             const word = words[Math.floor(Math.random() * words.length)];
             const scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
 
@@ -1005,6 +1144,16 @@
                     question: "Who painted the Mona Lisa?",
                     options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
                     answer: 2
+                },
+                {
+                    question: "What is the largest mammal in the world?",
+                    options: ["African Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
+                    answer: 1
+                },
+                {
+                    question: "Which element has the chemical symbol 'O'?",
+                    options: ["Gold", "Silver", "Oxygen", "Iron"],
+                    answer: 2
                 }
             ];
 
@@ -1015,7 +1164,7 @@
         }
 
         function showNextQuestion() {
-            if (gameState.currentQuestion >= 3) {
+            if (gameState.currentQuestion >= questions.length) {
                 endTriviaQuiz();
                 return;
             }
@@ -1047,7 +1196,7 @@
             gameContent.innerHTML = `
                 <h2>Trivia Quiz</h2>
                 <div class="trivia-quiz">
-                    <p>You scored ${gameState.score} out of 3!</p>
+                    <p>You scored ${gameState.score} out of ${questions.length}!</p>
                 </div>
             `;
             updateStats(5);
@@ -1189,6 +1338,8 @@
 
         function playerInput(color) {
             gameState.playerSequence.push(color);
+            flashSimonColor(color);
+
             if (gameState.playerSequence[gameState.playerSequence.length - 1] !== gameState.sequence[gameState.playerSequence.length - 1]) {
                 alert(`Game Over! You reached round ${gameState.round}.`);
                 updateStats(gameState.round);
@@ -1202,9 +1353,171 @@
             }
         }
 
-        // Initialize the games
-        initializeGames();
-        getNewJoke();
+        // Riddles Implementation
+        function initializeRiddles() {
+            const riddles = [
+                { question: "I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?", answer: "echo" },
+                { question: "You see a boat filled with people. It has not sunk, but when you look again you don't see a single person on the boat. Why?", answer: "all the people were married" },
+                { question: "What has keys, but no locks; space, but no room; you can enter, but not go in?", answer: "keyboard" },
+                { question: "What gets wet while drying?", answer: "towel" },
+                { question: "I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?", answer: "map" }
+            ];
+
+            gameState.currentRiddle = riddles[Math.floor(Math.random() * riddles.length)];
+
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Riddles</h2>
+                <div class="riddle-container">
+                    <p class="riddle">${gameState.currentRiddle.question}</p>
+                    <input type="text" id="riddleAnswer" placeholder="Enter your answer">
+                    <button class="btn" onclick="checkRiddleAnswer()">Submit</button>
+                </div>
+            `;
+        }
+
+        function checkRiddleAnswer() {
+            const userAnswer = document.getElementById('riddleAnswer').value.toLowerCase();
+            if (userAnswer === gameState.currentRiddle.answer) {
+                updateStats(5);
+                alert('Correct! You solved the riddle!');
+                setTimeout(backToMenu, 1500);
+            } else {
+                alert('That\'s not quite right. Try again!');
+            }
+        }
+
+        // Tongue Twisters Implementation
+        function initializeTongueTwisters() {
+            const tongueTwisters = [
+                "How much wood would a woodchuck chuck if a woodchuck could chuck wood?",
+                "She sells seashells by the seashore.",
+                "Peter Piper picked a peck of pickled peppers.",
+                "Betty Botter bought some butter but she said the butter's bitter.",
+                "I scream, you scream, we all scream for ice cream."
+            ];
+
+            gameState.currentTwister = tongueTwisters[Math.floor(Math.random() * tongueTwisters.length)];
+
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Tongue Twisters</h2>
+                <div class="tongue-twister-container">
+                    <p class="tongue-twister">${gameState.currentTwister}</p>
+                    <button class="btn" onclick="completeTongueTwister()">I said it!</button>
+                </div>
+            `;
+        }
+
+        function completeTongueTwister() {
+            updateStats(3);
+            alert('Great job!');
+            setTimeout(backToMenu, 1500);
+        }
+
+
+        // Guided Meditation Implementation
+        function initializeGuidedMeditation() {
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Guided Meditation</h2>
+                <div class="meditation-container">
+                    <p class="meditation-prompt">Find a comfortable position and focus on your breath. Let your thoughts drift away.</p>
+                    <div class="meditation-timer" id="meditationTimer">5:00</div>
+                    <button class="btn" onclick="startMeditationTimer()">Start Timer</button>
+                </div>
+            `;
+            gameState.meditationTime = 300; // 5 minutes in seconds
+        }
+
+        function startMeditationTimer() {
+            const timer = document.getElementById('meditationTimer');
+            let timeLeft = gameState.meditationTime;
+            const interval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timer.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                timeLeft--;
+                if (timeLeft < 0) {
+                    clearInterval(interval);
+                    updateStats(4);
+                    alert('Meditation complete!');
+                    setTimeout(backToMenu, 1500);
+                }
+            }, 1000);
+        }
+
+        // Breathing Exercise Implementation
+        function initializeBreathingExercise() {
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Breathing Exercise</h2>
+                <div class="breathing-exercise-container">
+                    <p class="breathing-prompt">Inhale deeply through your nose, hold for a few seconds, and exhale slowly through your mouth. Repeat for 5 minutes.</p>
+                    <div class="breathing-timer" id="breathingTimer">5:00</div>
+                    <button class="btn" onclick="startBreathingTimer()">Start Timer</button>
+                </div>
+            `;
+            gameState.breathingTime = 300; // 5 minutes in seconds
+        }
+
+        function startBreathingTimer() {
+            const timer = document.getElementById('breathingTimer');
+            let timeLeft = gameState.breathingTime;
+            const interval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timer.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                timeLeft--;
+                if (timeLeft < 0) {
+                    clearInterval(interval);
+                    updateStats(3);
+                    alert('Breathing exercise complete!');
+                    setTimeout(backToMenu, 1500);
+                }
+            }, 1000);
+        }
+
+        // Positive Affirmations Implementation
+        function initializePositiveAffirmations() {
+            const affirmations = [
+                "I am capable and strong.",
+                "I am worthy of love and happiness.",
+                "I am grateful for all the good in my life.",
+                "I am confident and self-assured.",
+                "I am peaceful and calm."
+            ];
+
+            gameState.currentAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h2>Positive Affirmations</h2>
+                <div class="positive-affirmation-container">
+                    <p class="affirmation">${gameState.currentAffirmation}</p>
+                    <button class="btn" onclick="showNextAffirmation()">Next Affirmation</button>
+                </div>
+            `;
+        }
+
+        function showNextAffirmation() {
+            const affirmations = [
+                "I am capable and strong.",
+                "I am worthy of love and happiness.",
+                "I am grateful for all the good in my life.",
+                "I am confident and self-assured.",
+                "I am peaceful and calm."
+            ];
+            gameState.currentAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+            document.querySelector('.affirmation').textContent = gameState.currentAffirmation;
+        }
+
+
+        window.onload = function () {
+            initializeGames();
+            getNewJoke();
+        }
     </script>
 </body>
 </html>
+
