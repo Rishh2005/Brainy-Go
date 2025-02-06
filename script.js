@@ -4,7 +4,6 @@ const taskForm = document.getElementById('taskForm');
 const taskList = document.getElementById('taskList');
 const completedTaskList = document.getElementById('completedTaskList');
 const quoteElement = document.getElementById('quote');
-
 // Themes
 themeSelect.addEventListener('change', () => {
     document.body.setAttribute('data-theme', themeSelect.value);
